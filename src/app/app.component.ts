@@ -10,7 +10,6 @@ import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToolbarModule } from 'primeng/toolbar';
-import { ThemeService } from './theme.service';
 
 @Component({
   selector: 'app-root',
@@ -26,12 +25,4 @@ import { ThemeService } from './theme.service';
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
-  isDarkMode = signal(true);
-  private readonly themeService: ThemeService = inject(ThemeService);
-
-  toggleDarkMode(): void {
-    this.isDarkMode.update((val) => !val);
-    this.themeService.switchTheme(this.isDarkMode());
-  }
-}
+export class AppComponent {}

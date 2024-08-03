@@ -1,11 +1,13 @@
 import { HttpMethod, SpectatorHttp, createHttpFactory } from '@ngneat/spectator';
 import { AppConfiguration, ConfigService } from './config.service';
 import { take } from 'rxjs';
+import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 
 describe(ConfigService.name, () => {
   let spectator: SpectatorHttp<ConfigService>;
   const createService = createHttpFactory({
     service: ConfigService,
+    providers: [provideExperimentalZonelessChangeDetection()]
   });
 
   beforeEach(() => (spectator = createService()));
