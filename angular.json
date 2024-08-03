@@ -20,9 +20,6 @@
             "outputPath": "dist/todo-app-sandbox",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -32,7 +29,17 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              {
+                "input": "theming/light.scss",
+                "bundleName": "light",
+                "inject": false
+              },
+              {
+                "input": "theming/dark.scss",
+                "bundleName": "dark",
+                "inject": false
+              }
             ],
             "scripts": []
           },
@@ -50,12 +57,26 @@
                   "maximumError": "4kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "./src/environments",
+                  "output": "/environments"
+                }
+              ]
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "./src/environments/development",
+                  "output": "/environments"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -78,10 +99,6 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -90,10 +107,9 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": []
+            "styles": ["src/styles.scss"],
+            "scripts": [],
+            "browsers": "ChromeHeadless"
           }
         }
       }
