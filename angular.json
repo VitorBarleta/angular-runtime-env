@@ -61,7 +61,7 @@
               "assets": [
                 {
                   "glob": "**/*",
-                  "input": "./src/environments",
+                  "input": "./src/environments/production",
                   "output": "/environments"
                 }
               ]
