@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "todo-app-sandbox": {
+    "app-sandbox": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/todo-app-sandbox",
+            "outputPath": "dist/app-sandbox",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
@@ -26,25 +26,20 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
-            ],
-            "styles": [
-              "src/styles.scss",
-              {
-                "input": "theming/light.scss",
-                "bundleName": "light",
-                "inject": false
               },
               {
-                "input": "theming/dark.scss",
-                "bundleName": "dark",
-                "inject": false
+                "glob": "**/*",
+                "input": "./src/environments",
+                "output": "/environments"
               }
             ],
+            "styles": ["src/styles.scss"],
             "scripts": []
           },
           "configurations": {
             "production": {
+              "optimization": true,
+              "sourceMap": false,
               "budgets": [
                 {
                   "type": "initial",
@@ -78,17 +73,16 @@
                 }
               ]
             }
-          },
-          "defaultConfiguration": "production"
+          }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "todo-app-sandbox:build:production"
+              "buildTarget": "app-sandbox:build:production"
             },
             "development": {
-              "buildTarget": "todo-app-sandbox:build:development"
+              "buildTarget": "app-sandbox:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -114,5 +108,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

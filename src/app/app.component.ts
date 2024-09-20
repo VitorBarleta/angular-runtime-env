@@ -2,14 +2,13 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
   inject,
-  signal,
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToolbarModule } from 'primeng/toolbar';
+import { APP_CONFIG } from './config.service';
 
 @Component({
   selector: 'app-root',
@@ -25,4 +24,6 @@ import { ToolbarModule } from 'primeng/toolbar';
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {}
+export class AppComponent {
+  readonly config = inject(APP_CONFIG);
+}
