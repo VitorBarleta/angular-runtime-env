@@ -1,24 +1,45 @@
-import { HttpMethod, SpectatorHttp, createHttpFactory } from '@ngneat/spectator';
-import { AppConfiguration, ConfigService } from './config.service';
-import { take } from 'rxjs';
-import { provideExperimentalZonelessChangeDetection } from '@angular/core';
+import {
+  APP_CONFIG,
+  AppConfiguration,
+  IConfigService,
+  provideEnvironmentVars,
+} from './config.service';
+import {
+  Injectable,
+  provideExperimentalZonelessChangeDetection,
+} from '@angular/core';
+import {
+  createServiceFactory,
+  mockProvider,
+  SpectatorService,
+} from '@ngneat/spectator';
+import { of } from 'rxjs';
 
-describe(ConfigService.name, () => {
-  let spectator: SpectatorHttp<ConfigService>;
-  const createService = createHttpFactory({
-    service: ConfigService,
-    providers: [provideExperimentalZonelessChangeDetection()]
+@Injectable()
+class Service {
+  name: string = '';
+}
+
+describe(provideEnvironmentVars.name, () => {
+  const expectedConfig: AppConfiguration = { apiUrl: 'sjoldfbjlsdbnfsd' };
+  let spectator: SpectatorService<Service>;
+  const createService = createServiceFactory({
+    service: Service,
+    providers: [
+      provideExperimentalZonelessChangeDetection(),
+      provideEnvironmentVars(),
+      mockProvider(IConfigService, {
+        configuration: expectedConfig,
+        fetchConfig: () => of(void 0),
+      }),
+    ],
   });
 
   beforeEach(() => (spectator = createService()));
 
-  it('should create', () => expect(spectator.service).toBeTruthy());
+  it('should provideEnvironmentVars', () => {
+    const appConfig: AppConfiguration = spectator.inject(APP_CONFIG);
 
-  it('should fetch the config and save it in the class state', () => {
-    const expectedResponse: AppConfiguration = { apiUrl: 'my-fake-url' };
-
-    spectator.service.fetchConfig().pipe(take(1)).subscribe();
-    spectator.expectOne('/environments/environment.json', HttpMethod.GET).flush(expectedResponse);
-    expect(spectator.service.configuration).toBe(expectedResponse);
+    expect(appConfig).toBe(expectedConfig);
   });
 });

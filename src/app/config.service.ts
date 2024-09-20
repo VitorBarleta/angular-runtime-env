@@ -27,22 +27,32 @@ const initializeAppConfiguration = (
 export const provideEnvironmentVars = (): EnvironmentProviders => {
   return makeEnvironmentProviders([
     {
+      provide: IConfigService,
+      useClass: ConfigService
+    },
+    {
       provide: APP_INITIALIZER,
       multi: true,
       useFactory: initializeAppConfiguration,
-      deps: [ConfigService],
+      deps: [IConfigService],
     },
     {
       provide: APP_CONFIG,
       multi: false,
       useFactory: (configService: ConfigService) => configService.configuration,
-      deps: [ConfigService],
+      deps: [IConfigService],
     },
   ]);
 };
 
-@Injectable({ providedIn: 'root' })
-export class ConfigService {
+export abstract class IConfigService {
+  abstract get configuration(): Readonly<AppConfiguration>;
+
+  abstract fetchConfig(): Observable<void>;
+}
+
+@Injectable()
+class ConfigService implements IConfigService {
   private appConfiguration: Readonly<AppConfiguration> = { apiUrl: '' };
 
   get configuration(): Readonly<AppConfiguration> {
